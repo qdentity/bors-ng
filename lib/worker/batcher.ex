@@ -537,7 +537,7 @@ defmodule BorsNG.Worker.Batcher do
                       tree: merge_commit.tree,
                       parents: [prev_head],
                       commit_message: commit_message,
-                      committer: %{name: user.name || user.login, email: user_email}
+                      committer: %{name: user.login, email: user_email}
                     }
                   )
 
