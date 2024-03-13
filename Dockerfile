@@ -1,17 +1,16 @@
-ARG ELIXIR_VERSION=1.14.5
 ARG SOURCE_COMMIT
 
-FROM elixir:${ELIXIR_VERSION} as builder
+FROM hexpm/elixir:1.14.5-erlang-25.3.2.10-debian-buster-20240130 AS builder
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 RUN apt-get update -q && apt-get --no-install-recommends install -y apt-utils ca-certificates build-essential libtool autoconf curl git
 
-RUN DEBIAN_CODENAME=$(sed -n 's/VERSION=.*(\(.*\)).*/\1/p' /etc/os-release) && \
-    curl -q https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-    echo "deb http://deb.nodesource.com/node_12.x $DEBIAN_CODENAME main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update -q && \
-    apt-get --no-install-recommends install -y nodejs npm
+RUN apt-get update --no-install-recommends -y \
+  && apt-get install --no-install-recommends -y build-essential ca-certificates curl git gnupg \
+  && curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
+  && apt-get install nodejs -y \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* && rm -rf /etc/apt/sources.list.d/*
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
