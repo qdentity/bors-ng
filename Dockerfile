@@ -11,7 +11,7 @@ RUN DEBIAN_CODENAME=$(sed -n 's/VERSION=.*(\(.*\)).*/\1/p' /etc/os-release) && \
     curl -q https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     echo "deb http://deb.nodesource.com/node_12.x $DEBIAN_CODENAME main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update -q && \
-    apt-get --no-install-recommends install -y nodejs
+    apt-get --no-install-recommends install -y nodejs npm
 
 RUN mix local.hex --force && \
     mix local.rebar --force && \
